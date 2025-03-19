@@ -30,4 +30,4 @@ jobs:
           git config --global user.email "actions@github.com"
           git add ebay_tech_deals.csv
           git commit -m "Updated eBay Tech Deals data (3-hour intervals)"
-          git push
+          git push origin dev 
