@@ -2,8 +2,8 @@ name: eBay Tech Deals Scraper (Every 3 Hours)
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  
-  workflow_dispatch:        
+    - cron: '0 */3 * * *'  # Run every 3 hours
+  workflow_dispatch:        # Allows manual triggering
 
 jobs:
   scrape-ebay:
@@ -19,25 +19,15 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install selenium pandas webdriver-manager fake-useragent jupyter
-
-      - name: Pull latest changes
-        run: git pull origin main
+        run: pip install selenium pandas webdriver-manager fake-useragent
 
       - name: Run Selenium scraper
         run: python scraper.py
 
-      - name: Clean Data
-        run: python clean_data.py
-
-      - name: Run Jupyter Notebook for Data Processing
-        run: |
-          jupyter nbconvert --to notebook --execute ebay_cleaned_data_Visual.ipynb --output ebay_cleaned_data_Visual_output.ipynb
-
-      - name: Commit and Push updated files
+      - name: Commit and Push updated CSV
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add ebay_tech_deals.csv cleaned_ebay_deals.csv ebay_cleaned_data_Visual_output.ipynb
-          git commit -m "Automated update: Scraped, cleaned, and processed data"
+          git add ebay_tech_deals.csv
+          git commit -m "Updated eBay Tech Deals data (3-hour intervals)"
           git push origin main
